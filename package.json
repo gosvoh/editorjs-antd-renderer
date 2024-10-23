@@ -1,0 +1,56 @@
+{
+  "name": "editorjs-antd-renderer",
+  "description": "A React renderer for Editor.js with Ant Design components",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "lint": "eslint ."
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "antd": "^5.21.5"
+  },
+  "devDependencies": {
+    "@editorjs/editorjs": "^2.30.6",
+    "@eslint/js": "^9.13.0",
+    "@types/bun": "latest",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@types/sanitize-html": "^2.13.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "ajv": "^8.17.1",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.13",
+    "glob": "^11.0.0",
+    "globals": "^15.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.10.0",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-lib-inject-css": "^2.1.1"
+  },
+  "dependencies": {
+    "html-react-parser": "^5.1.18",
+    "hylang": "^0.1.0",
+    "react-katex": "^3.0.1",
+    "react-syntax-highlighter": "^15.6.1",
+    "sanitize-html": "^2.13.1",
+    "@ant-design/icons": "^5.5.1"
+  }
+}
