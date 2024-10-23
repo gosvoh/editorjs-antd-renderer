@@ -6,6 +6,26 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "author": {
+    "name": "Aleksei Vokhmin",
+    "email": "vohmina2011@yandex.ru",
+    "url": "https://gosvoh.ru"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gosvoh/editorjs-antd-renderer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gosvoh/editorjs-antd-renderer/issues"
+  },
+  "homepage": "https://github.com/gosvoh/editorjs-antd-renderer",
+  "keywords": [
+    "editorjs",
+    "react",
+    "antd",
+    "renderer"
+  ],
   "files": [
     "dist"
   ],
