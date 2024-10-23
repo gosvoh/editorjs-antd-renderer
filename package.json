@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gosvoh/editorjs-antd-renderer.git"
+    "url": "git+https://github.com/gosvoh/editorjs-antd-renderer.git"
   },
   "bugs": {
     "url": "https://github.com/gosvoh/editorjs-antd-renderer/issues"
