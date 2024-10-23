@@ -15,13 +15,15 @@ export default function Renderer({
   config,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
-  data: string | OutputData;
+  data?: string | OutputData;
   config?: {
     image?: ImageConfig;
     code?: CodeConfig;
     attaches?: AttachesConfig;
   };
 }) {
+  if (!data) return null;
+
   if (!["object", "string"].includes(typeof data))
     return (
       <p style={{ color: "red" }}>
