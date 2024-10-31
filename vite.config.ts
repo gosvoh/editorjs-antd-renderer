@@ -36,6 +36,20 @@ export default defineConfig({
       output: {
         assetFileNames: "assets/[name][extname]",
         entryFileNames: "[name].js",
+        chunkFileNames: ({ name }) => {
+          if (name.endsWith(".js")) return `vendor/${name}`;
+          return `vendor/${name.startsWith("lang") ? "lang" : ""}/${name}.js`;
+        },
+        manualChunks: (id) => {
+          const packageName: string | undefined = id.match(
+            /node_modules\/(.+?)\//
+          )?.[1];
+          if (packageName?.startsWith("katex")) return "katex";
+          if (packageName?.startsWith("highlight.js")) {
+            const langName = id.match(/languages\/(.+)\.js/)?.[1];
+            if (langName) return `lang-${langName[0]}`;
+          }
+        },
       },
     },
   },
