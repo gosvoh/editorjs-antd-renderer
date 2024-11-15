@@ -8,11 +8,13 @@ import {
 
 export type CodeConfig = {
   theme?: "Light" | "Dark";
+  showLineNumbers?: boolean;
+  style?: React.CSSProperties;
 };
 
 export default function Code({
   data,
-  config = { theme: "Light" },
+  config = { theme: "Light", showLineNumbers: true },
 }: {
   data: { code: string };
   config?: CodeConfig;
@@ -21,6 +23,8 @@ export default function Code({
     <SyntaxHighlighter
       language={detectLanguage(data.code)}
       style={config.theme === "Dark" ? darcula : defaultStyle}
+      customStyle={{ padding: "1rem", borderRadius: "0.5rem", ...config.style }}
+      showLineNumbers={config.showLineNumbers}
     >
       {data.code}
     </SyntaxHighlighter>
