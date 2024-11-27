@@ -17,11 +17,11 @@ function ListRenderer({
   meta,
 }: React.PropsWithChildren<{
   style: string;
-  meta: ItemMeta;
+  meta?: ItemMeta;
 }>) {
   if (["unordered", "checklist"].includes(style)) return <ul>{children}</ul>;
   return (
-    <ol start={meta.start} style={{ listStyleType: meta.counterType }}>
+    <ol start={meta?.start} style={{ listStyleType: meta?.counterType }}>
       {children}
     </ol>
   );
