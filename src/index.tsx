@@ -8,6 +8,7 @@ import Code, { type CodeConfig } from "./blocks/code/code";
 import React from "react";
 import Math from "./blocks/math/math";
 import Attaches, { type AttachesConfig } from "./blocks/attaches/attaches";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default function Renderer({
   data,
@@ -79,7 +80,16 @@ export default function Renderer({
       {...props}
     >
       {blocks.map((block, index) => (
-        <React.Fragment key={index}>{block}</React.Fragment>
+        <ErrorBoundary
+          key={index}
+          fallback={
+            <p style={{ color: "red" }}>
+              Error rendering block: {blocks[index].type}
+            </p>
+          }
+        >
+          {block}
+        </ErrorBoundary>
       ))}
     </div>
   );
