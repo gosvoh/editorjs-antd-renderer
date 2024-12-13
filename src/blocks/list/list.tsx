@@ -12,25 +12,29 @@ type Item = {
 };
 
 function ListRenderer({
-  style,
-  children,
-  meta,
-}: React.PropsWithChildren<{
+                        style,
+                        children,
+                        meta,
+                      }: React.PropsWithChildren<{
   style: string;
   meta?: ItemMeta;
 }>) {
+
   if (["unordered", "checklist"].includes(style)) return <ul>{children}</ul>;
   return (
-    <ol start={meta?.start} style={{ listStyleType: meta?.counterType }}>
+    <ol start={meta?.start} className={`nested-${meta?.counterType}`} style={{
+      counterReset: `item ${meta?.start ? meta?.start - 1 : ""}`
+    }}>
+
       {children}
     </ol>
   );
 }
 
 export default function List({
-  data,
-}: {
-  data: { style: string; items: Item[] | string[]; meta: Item["meta"] };
+                               data,
+                             }: {
+  data: { style: string; items: Item[] | string[]; meta: ItemMeta };
 }) {
   const getRecursiveList = (items: Item[] | string[], nesting = 0) =>
     items.map((item, index) => {
@@ -39,7 +43,7 @@ export default function List({
 
       return (
         <li
-          style={{ display: data.style === "checklist" ? "block" : undefined }}
+          style={{display: data.style === "checklist" ? "block" : undefined}}
           key={`list-item-${nesting}-${index}`}
         >
           {data.style === "checklist" ? (
@@ -51,7 +55,7 @@ export default function List({
           )}
           {item.items.length > 0 && (
             <ListRenderer
-              meta={{ counterType: data.meta.counterType, ...item.meta }}
+              meta={{counterType: data.meta.counterType, ...item.meta}}
               style={data.style}
             >
               {getRecursiveList(item.items, nesting + 1)}
@@ -61,8 +65,22 @@ export default function List({
       );
     });
 
+  const olStyle = `
+      ol.nested-${data.meta?.counterType} li:before {
+            counter-increment: item;
+            white-space: nowrap;
+            padding-right: 8px;
+            content: counters(item, ".", ${data.meta?.counterType}) ".";
+      }
+      ol.nested-${data.meta?.counterType} {
+          counter-reset: item;
+          list-style-type: none;
+      }
+      `;
+
   return (
     <Typography.Paragraph>
+      <style dangerouslySetInnerHTML={{__html: olStyle}}/>
       <ListRenderer style={data.style} meta={data.meta}>
         {getRecursiveList(data.items)}
       </ListRenderer>
