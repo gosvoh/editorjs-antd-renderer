@@ -87,7 +87,7 @@ export default function Renderer({
           key={index}
           fallback={
             <p style={{ color: "red" }}>
-              Error rendering block: {blocks[index].type}
+              Error rendering block: {dataObject.blocks[index].type}
             </p>
           }
         >
