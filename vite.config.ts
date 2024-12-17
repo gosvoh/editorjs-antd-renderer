@@ -13,7 +13,10 @@ export default defineConfig({
     react(),
     visualizer(),
     libInjectCss(),
-    dts({ tsconfigPath: resolve(__dirname, "tsconfig.json") }),
+    dts({
+      tsconfigPath: resolve(__dirname, "tsconfig.json"),
+      exclude: ["src/**/*.test.tsx"],
+    }),
   ],
   build: {
     copyPublicDir: false,
@@ -26,7 +29,7 @@ export default defineConfig({
       input: Object.fromEntries(
         glob
           .sync("src/**/*.{ts,tsx}", {
-            ignore: ["src/**/*.d.ts"],
+            ignore: ["src/**/*.d.ts", "src/**/*.test.tsx"],
           })
           .map((file) => [
             relative("src", file.slice(0, file.length - extname(file).length)),
