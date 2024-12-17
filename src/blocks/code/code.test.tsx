@@ -2,13 +2,13 @@ import { expect, test } from "bun:test";
 import Renderer from "../../index";
 import { screen, render } from "@testing-library/react";
 
-// https://github.com/editor-js/paragraph#output-data
+// https://github.com/editor-js/code#output-data
 const correctData = {
   blocks: [
     {
-      type: "paragraph",
+      type: "code",
       data: {
-        text: "Check out our projects on a GitHub page.",
+        code: "body {\n font-size: 14px;\n line-height: 16px;\n}",
       },
     },
   ],
@@ -17,25 +17,25 @@ const correctData = {
 const errorData = {
   blocks: [
     {
-      type: "notParagraph",
+      type: "notCode",
       data: {},
     },
   ],
 };
 
-test("Paragraph", () => {
+test("Code", () => {
   render(<Renderer data={correctData} />);
-  const component = screen.getByText(correctData.blocks[0].data.text);
+  const component = screen.getByRole("code");
   // @ts-expect-error
   expect(component).toBeInTheDocument();
 });
 
-test("Error paragraph", () => {
+test("Error code", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {
     exact: false,
   });
-  const correctComponent = screen.queryByText(correctData.blocks[0].data.text);
+  const correctComponent = screen.queryByRole("code");
   // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
   // @ts-expect-error

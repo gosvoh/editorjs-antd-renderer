@@ -73,22 +73,7 @@ const errorData = {
   blocks: [
     {
       type: "notList",
-      data: {
-        style: "unordered",
-        items: [
-          {
-            content: "Apples",
-            meta: {},
-            items: [
-              {
-                content: "Red",
-                meta: {},
-                items: [],
-              },
-            ],
-          },
-        ],
-      },
+      data: {},
     },
   ],
 };
@@ -99,6 +84,12 @@ test("List", () => {
   expect(applesElements).toHaveLength(3);
   const redElements = screen.getAllByText("Red");
   expect(redElements).toHaveLength(3);
+  const checklistItems = screen.getAllByRole("checkbox");
+  expect(checklistItems).toHaveLength(2);
+  // @ts-expect-error
+  expect(checklistItems[0]).not.toBeChecked();
+  // @ts-expect-error
+  expect(checklistItems[1]).toBeChecked();
 });
 
 test("Error list", () => {

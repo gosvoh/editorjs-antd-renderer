@@ -2,13 +2,13 @@ import { expect, test } from "bun:test";
 import Renderer from "../../index";
 import { screen, render } from "@testing-library/react";
 
-// https://github.com/editor-js/paragraph#output-data
+// https://github.com/n0str/editorjs-math#output-data
 const correctData = {
   blocks: [
     {
-      type: "paragraph",
+      type: "math",
       data: {
-        text: "Check out our projects on a GitHub page.",
+        text: "\\{1,2,3,\\ldots ,n\\}",
       },
     },
   ],
@@ -17,25 +17,25 @@ const correctData = {
 const errorData = {
   blocks: [
     {
-      type: "notParagraph",
+      type: "notMath",
       data: {},
     },
   ],
 };
 
-test("Paragraph", () => {
+test("Math", () => {
   render(<Renderer data={correctData} />);
-  const component = screen.getByText(correctData.blocks[0].data.text);
+  const component = screen.getByRole("math");
   // @ts-expect-error
   expect(component).toBeInTheDocument();
 });
 
-test("Error paragraph", () => {
+test("Error math", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {
     exact: false,
   });
-  const correctComponent = screen.queryByText(correctData.blocks[0].data.text);
+  const correctComponent = screen.queryByRole("math");
   // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
   // @ts-expect-error

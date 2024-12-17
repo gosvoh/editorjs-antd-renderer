@@ -19,10 +19,7 @@ const errorData = {
   blocks: [
     {
       type: "notHeader",
-      data: {
-        text: "Why Telegram is the best messenger",
-        level: 2,
-      },
+      data: {},
     },
   ],
 };

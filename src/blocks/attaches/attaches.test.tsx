@@ -2,13 +2,19 @@ import { expect, test } from "bun:test";
 import Renderer from "../../index";
 import { screen, render } from "@testing-library/react";
 
-// https://github.com/editor-js/paragraph#output-data
+// https://github.com/editor-js/attaches#output-data
 const correctData = {
   blocks: [
     {
-      type: "paragraph",
+      type: "attaches",
       data: {
-        text: "Check out our projects on a GitHub page.",
+        file: {
+          url: "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
+          size: 91,
+          name: "hero.jpg",
+          extension: "jpg",
+        },
+        title: "Hero",
       },
     },
   ],
@@ -17,25 +23,30 @@ const correctData = {
 const errorData = {
   blocks: [
     {
-      type: "notParagraph",
+      type: "notAttaches",
       data: {},
     },
   ],
 };
 
-test("Paragraph", () => {
+test("Attaches", () => {
   render(<Renderer data={correctData} />);
-  const component = screen.getByText(correctData.blocks[0].data.text);
+  const component = screen.getByText(correctData.blocks[0].data.title);
   // @ts-expect-error
   expect(component).toBeInTheDocument();
+  // @ts-expect-error
+  expect(component).toHaveAttribute(
+    "href",
+    correctData.blocks[0].data.file.url,
+  );
 });
 
-test("Error paragraph", () => {
+test("Error attaches", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {
     exact: false,
   });
-  const correctComponent = screen.queryByText(correctData.blocks[0].data.text);
+  const correctComponent = screen.queryByText(correctData.blocks[0].data.title);
   // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
   // @ts-expect-error
