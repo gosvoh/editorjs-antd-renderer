@@ -31,7 +31,7 @@ export default defineConfig({
           .map((file) => [
             relative("src", file.slice(0, file.length - extname(file).length)),
             fileURLToPath(new URL(file, import.meta.url)),
-          ])
+          ]),
       ),
       output: {
         assetFileNames: "assets/[name][extname]",
@@ -42,7 +42,7 @@ export default defineConfig({
         },
         manualChunks: (id) => {
           const packageName: string | undefined = id.match(
-            /node_modules\/(.+?)\//
+            /node_modules\/(.+?)\//,
           )?.[1];
           if (packageName?.startsWith("katex")) return "katex";
           if (packageName?.startsWith("highlight.js")) {
