@@ -30,7 +30,7 @@ function ListRenderer({
 export default function List({
   data,
 }: {
-  data: { style: string; items: Item[] | string[]; meta: Item["meta"] };
+  data: { style: string; items: Item[] | string[]; meta?: Item["meta"] };
 }) {
   const getRecursiveList = (items: Item[] | string[], nesting = 0) =>
     items.map((item, index) => {
@@ -51,7 +51,7 @@ export default function List({
           )}
           {item.items.length > 0 && (
             <ListRenderer
-              meta={{ counterType: data.meta.counterType, ...item.meta }}
+              meta={{ counterType: data.meta?.counterType, ...item.meta }}
               style={data.style}
             >
               {getRecursiveList(item.items, nesting + 1)}
