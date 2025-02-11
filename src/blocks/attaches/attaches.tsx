@@ -8,20 +8,31 @@ export type AttachesConfig = {
 export default function Attaches({
   data,
   config,
+  linkProps,
+  buttonProps,
+  ...props
 }: {
   data: {
     file: { url?: string; size?: number; name?: string; extension?: string };
     title: string;
   };
   config?: AttachesConfig;
+  props?: React.ComponentProps<typeof Space>;
+  linkProps?: React.ComponentProps<typeof Typography.Link>;
+  buttonProps?: React.ComponentProps<typeof Button>;
 }) {
   const url = config?.urlPrefix
     ? `${config.urlPrefix}${data.file.url}`
     : data.file.url;
 
   return (
-    <Space>
-      <Typography.Link href={url} download={data.file.name} target="_blank">
+    <Space {...props}>
+      <Typography.Link
+        href={url}
+        download={data.file.name}
+        target="_blank"
+        {...linkProps}
+      >
         {data.title}
       </Typography.Link>
       <Button
@@ -30,6 +41,7 @@ export default function Attaches({
         download={data.file.name}
         target="_blank"
         type="primary"
+        {...buttonProps}
       />
     </Space>
   );
