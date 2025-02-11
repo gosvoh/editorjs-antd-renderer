@@ -14,6 +14,8 @@ Render [Editor.js](https://editorjs.io) data to React components.
 - [x] CheckList
 - [x] InlineCode
 - [x] SimpleImage
+- [x] Embed
+- [x] Quote
 
 ## Getting Started
 

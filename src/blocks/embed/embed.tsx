@@ -19,8 +19,10 @@ export default function Embed({
     /** Content caption */
     caption?: string;
   };
-  props?: React.ComponentProps<typeof Space>;
-}) {
+} & React.ComponentProps<typeof Space>) {
+  if (data.service.includes("twitch")) {
+    data.embed = `${data.embed}&parent=${window.location.hostname}`;
+  }
   const serviceHtml = SERVICES[data.service].html.replace(
     "><",
     ` src="${data.embed}"><`,

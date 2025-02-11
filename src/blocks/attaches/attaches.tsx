@@ -17,10 +17,9 @@ export default function Attaches({
     title: string;
   };
   config?: AttachesConfig;
-  props?: React.ComponentProps<typeof Space>;
   linkProps?: React.ComponentProps<typeof Typography.Link>;
   buttonProps?: React.ComponentProps<typeof Button>;
-}) {
+} & React.ComponentProps<typeof Space>) {
   const url = config?.urlPrefix
     ? `${config.urlPrefix}${data.file.url}`
     : data.file.url;

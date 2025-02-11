@@ -10,11 +10,13 @@ import Math from "./blocks/math/math";
 import Attaches, { type AttachesConfig } from "./blocks/attaches/attaches";
 import { ErrorBoundary } from "react-error-boundary";
 import Embed from "./blocks/embed/embed";
+import Quote from "./blocks/quote/quote";
 
 export default function Renderer({
   data,
   style,
   config,
+  blocksProps,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
   data?: string | OutputData;
@@ -22,6 +24,11 @@ export default function Renderer({
     image?: ImageConfig;
     code?: CodeConfig;
     attaches?: AttachesConfig;
+  };
+  blocksProps?: {
+    attaches?: Omit<React.ComponentProps<typeof Attaches>, "data" | "config">;
+    embed?: Omit<React.ComponentProps<typeof Embed>, "data">;
+    quote?: Omit<React.ComponentProps<typeof Quote>, "data">;
   };
 }) {
   if (!data) return null;
@@ -60,9 +67,17 @@ export default function Renderer({
         return <Math data={block.data} />;
       case "attaches":
       case "attach":
-        return <Attaches data={block.data} config={config?.attaches} />;
+        return (
+          <Attaches
+            data={block.data}
+            config={config?.attaches}
+            {...blocksProps?.attaches}
+          />
+        );
       case "embed":
-        return <Embed data={block.data} />;
+        return <Embed data={block.data} {...blocksProps?.embed} />;
+      case "quote":
+        return <Quote data={block.data} {...blocksProps?.quote} />;
       default:
         return (
           <p style={{ color: "red" }}>
