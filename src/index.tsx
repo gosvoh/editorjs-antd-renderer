@@ -9,6 +9,7 @@ import React from "react";
 import Math from "./blocks/math/math";
 import Attaches, { type AttachesConfig } from "./blocks/attaches/attaches";
 import { ErrorBoundary } from "react-error-boundary";
+import Embed from "./blocks/embed/embed";
 
 export default function Renderer({
   data,
@@ -60,6 +61,8 @@ export default function Renderer({
       case "attaches":
       case "attach":
         return <Attaches data={block.data} config={config?.attaches} />;
+      case "embed":
+        return <Embed data={block.data} />;
       default:
         return (
           <p style={{ color: "red" }}>
