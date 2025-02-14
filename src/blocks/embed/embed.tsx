@@ -30,12 +30,14 @@ export default function Embed({
 
   return (
     <Space direction="vertical" {...props}>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: serviceHtml,
-        }}
-      />
-      {data.caption && <Typography.Text>{data.caption}</Typography.Text>}
+      <div style={{maxWidth: data.width ?? 700}}>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: serviceHtml,
+          }}
+        />
+        {data.caption && <Typography.Text>{data.caption}</Typography.Text>}
+      </div>
     </Space>
-  );
+);
 }
