@@ -29,6 +29,10 @@ export default function Renderer({
     attaches?: Omit<React.ComponentProps<typeof Attaches>, "data" | "config">;
     embed?: Omit<React.ComponentProps<typeof Embed>, "data">;
     quote?: Omit<React.ComponentProps<typeof Quote>, "data">;
+    image?: Omit<React.ComponentProps<typeof Image>, "data" | "config">;
+    checklist?: Omit<React.ComponentProps<typeof Checklist>, "data">;
+    header?: Omit<React.ComponentProps<typeof Header>, "data">;
+    paragraph?: Omit<React.ComponentProps<typeof Paragraph>, "data">;
   };
 }) {
   if (!data) return null;
@@ -52,15 +56,22 @@ export default function Renderer({
   const blocks = dataObject.blocks.map((block) => {
     switch (block.type) {
       case "header":
-        return <Header data={block.data} />;
+        return <Header data={block.data} {...blocksProps?.header} />;
       case "paragraph":
-        return <Paragraph data={block.data} />;
+        return <Paragraph data={block.data} {...blocksProps?.paragraph} />;
       case "list":
         return <List data={block.data} />;
       case "checklist":
-        return <Checklist data={block.data} />;
+        return <Checklist data={block.data} {...blocksProps?.checklist} />;
       case "image":
-        return <Image data={block.data} config={config?.image} />;
+      case "simpleImage":
+        return (
+          <Image
+            data={block.data}
+            config={config?.image}
+            {...blocksProps?.image}
+          />
+        );
       case "code":
         return <Code data={block.data} config={config?.code} />;
       case "math":
