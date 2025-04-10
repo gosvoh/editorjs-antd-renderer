@@ -10,6 +10,8 @@ export default function Attaches({
   config,
   linkProps,
   buttonProps,
+  buttonPosition = "right",
+  buttonIcon = <DownloadOutlined />,
   ...props
 }: {
   data: {
@@ -19,6 +21,8 @@ export default function Attaches({
   config?: AttachesConfig;
   linkProps?: React.ComponentProps<typeof Typography.Link>;
   buttonProps?: React.ComponentProps<typeof Button>;
+  buttonPosition?: "left" | "right";
+  buttonIcon?: React.ReactNode;
 } & React.ComponentProps<typeof Space>) {
   const url = config?.urlPrefix
     ? `${config.urlPrefix}${data.file.url}`
@@ -26,6 +30,16 @@ export default function Attaches({
 
   return (
     <Space {...props}>
+      {buttonPosition === "left" && (
+        <Button
+          icon={buttonIcon}
+          href={url}
+          download={data.file.name}
+          target="_blank"
+          type="primary"
+          {...buttonProps}
+        />
+      )}
       <Typography.Link
         href={url}
         download={data.file.name}
@@ -34,14 +48,16 @@ export default function Attaches({
       >
         {data.title}
       </Typography.Link>
-      <Button
-        icon={<DownloadOutlined />}
-        href={url}
-        download={data.file.name}
-        target="_blank"
-        type="primary"
-        {...buttonProps}
-      />
+      {buttonPosition === "right" && (
+        <Button
+          icon={buttonIcon}
+          href={url}
+          download={data.file.name}
+          target="_blank"
+          type="primary"
+          {...buttonProps}
+        />
+      )}
     </Space>
   );
 }
