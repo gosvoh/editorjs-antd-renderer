@@ -13,6 +13,7 @@ import Embed from "./blocks/embed/embed";
 import Quote from "./blocks/quote/quote";
 import Delimiter from "./blocks/delimiter/delimiter";
 import Warning from "./blocks/warning/warning";
+import TableBlock from "./blocks/table/table";
 
 export type {
   HeaderData,
@@ -29,6 +30,7 @@ export type {
   QuoteData,
   DelimiterData,
   WarningData,
+  TableData,
 } from "./types";
 export type { ImageConfig } from "./blocks/image/image";
 export type { CodeConfig } from "./blocks/code/code";
@@ -67,6 +69,7 @@ export default function Renderer({
     list?: Omit<React.ComponentProps<typeof List>, "data">;
     delimiter?: React.ComponentProps<typeof Delimiter>;
     warning?: Omit<React.ComponentProps<typeof Warning>, "data">;
+    table?: Omit<React.ComponentProps<typeof TableBlock>, "data">;
   };
   customBlocks?: Record<string, CustomBlockRenderer>;
 }) {
@@ -163,6 +166,8 @@ export default function Renderer({
         return <Embed data={block.data} {...blocksProps?.embed} />;
       case "quote":
         return <Quote data={block.data} {...blocksProps?.quote} />;
+      case "table":
+        return <TableBlock data={block.data} {...blocksProps?.table} />;
       case "delimiter":
         return <Delimiter {...blocksProps?.delimiter} />;
       case "warning":

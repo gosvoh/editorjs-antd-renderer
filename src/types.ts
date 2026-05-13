@@ -72,3 +72,8 @@ export type WarningData = {
   title: string;
   message: string;
 };
+
+export type TableData = {
+  withHeadings: boolean;
+  content: string[][];
+};
