@@ -4,19 +4,28 @@ import Paragraph from "./blocks/paragraph/paragraph";
 import List from "./blocks/list/list";
 import Checklist from "./blocks/checklist/checklist";
 import Image, { type ImageConfig } from "./blocks/image/image";
-import Code, { type CodeConfig } from "./blocks/code/code";
-import React from "react";
-import Math from "./blocks/math/math";
+import type { CodeConfig } from "./blocks/code/code";
+import React, { lazy, Suspense } from "react";
+import { Skeleton } from "antd";
 import Attaches, { type AttachesConfig } from "./blocks/attaches/attaches";
 import { ErrorBoundary } from "react-error-boundary";
 import Embed from "./blocks/embed/embed";
 import Quote from "./blocks/quote/quote";
+
+const Code = lazy(() => import("./blocks/code/code"));
+const Math = lazy(() => import("./blocks/math/math"));
+
+export type CustomBlockRenderer = (block: {
+  type: string;
+  data: Record<string, unknown>;
+}) => React.ReactNode;
 
 export default function Renderer({
   data,
   style,
   config,
   blocksProps,
+  customBlocks,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
   data?: string | OutputData;
@@ -34,6 +43,7 @@ export default function Renderer({
     header?: Omit<React.ComponentProps<typeof Header>, "data">;
     paragraph?: Omit<React.ComponentProps<typeof Paragraph>, "data">;
   };
+  customBlocks?: Record<string, CustomBlockRenderer>;
 }) {
   if (!data) return null;
 
@@ -44,8 +54,14 @@ export default function Renderer({
       </p>
     );
 
-  const dataObject: OutputData =
-    typeof data === "string" ? JSON.parse(data) : data;
+  let dataObject: OutputData;
+  try {
+    dataObject = typeof data === "string" ? JSON.parse(data) : data;
+  } catch {
+    return (
+      <p style={{ color: "red" }}>Error rendering component: invalid JSON</p>
+    );
+  }
   if (!dataObject.blocks)
     return (
       <p style={{ color: "red" }}>
@@ -73,9 +89,42 @@ export default function Renderer({
           />
         );
       case "code":
-        return <Code data={block.data} config={config?.code} />;
+        return (
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  padding: "1rem",
+                  borderRadius: "0.5rem",
+                  background: "rgba(128,128,128,0.06)",
+                }}
+              >
+                <Skeleton
+                  active
+                  title={false}
+                  paragraph={{
+                    rows: 6,
+                    width: ["55%", "80%", "40%", "70%", "88%", "25%"],
+                  }}
+                />
+              </div>
+            }
+          >
+            <Code data={block.data} config={config?.code} />
+          </Suspense>
+        );
       case "math":
-        return <Math data={block.data} />;
+        return (
+          <Suspense
+            fallback={
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Skeleton.Input active style={{ width: 220 }} />
+              </div>
+            }
+          >
+            <Math data={block.data} />
+          </Suspense>
+        );
       case "attaches":
       case "attach":
         return (
@@ -90,6 +139,9 @@ export default function Renderer({
       case "quote":
         return <Quote data={block.data} {...blocksProps?.quote} />;
       default:
+        if (customBlocks?.[block.type]) {
+          return customBlocks[block.type](block);
+        }
         return (
           <p style={{ color: "red" }}>
             Error rendering block: unknown block type {block.type}
@@ -113,7 +165,7 @@ export default function Renderer({
           key={index}
           fallback={
             <p style={{ color: "red" }}>
-              Error rendering block: {blocks[index].type}
+              Error rendering block: {dataObject.blocks[index].type}
             </p>
           }
         >
