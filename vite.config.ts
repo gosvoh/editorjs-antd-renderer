@@ -1,57 +1,106 @@
 import { defineConfig } from "vite";
+import type { Plugin, Rollup } from "vite";
 import react from "@vitejs/plugin-react";
-import { libInjectCss } from "vite-plugin-lib-inject-css";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
 import { visualizer } from "rollup-plugin-visualizer";
-import { extname, relative, resolve } from "path";
-import { fileURLToPath } from "node:url";
-import { glob } from "glob";
+import { resolve, posix } from "path";
+
+// vite-plugin-lib-inject-css relies on chunk.viteMetadata which Rolldown doesn't
+// populate. This plugin matches CSS assets to JS chunks by name and injects
+// import statements so consumers don't have to import CSS manually.
+function injectCssIntoChunks(): Plugin {
+  return {
+    name: "inject-css-into-chunks",
+    apply: "build",
+    enforce: "post",
+    generateBundle(_, bundle) {
+      const cssAssets = Object.values(bundle).filter(
+        (a): a is Rollup.OutputAsset =>
+          a.type === "asset" && a.fileName.endsWith(".css"),
+      );
+      if (cssAssets.length === 0) return;
+
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== "chunk") continue;
+
+        const matching = cssAssets.filter((css) => {
+          const cssName = posix.basename(css.fileName, ".css");
+          // Inject into the chunk whose name matches the CSS base name,
+          // or into the entry chunk for any CSS that didn't match a named chunk.
+          return (
+            cssName === chunk.name ||
+            (chunk.isEntry &&
+              !Object.values(bundle).some(
+                (c) => c.type === "chunk" && c.name === cssName,
+              ))
+          );
+        });
+
+        if (matching.length === 0) continue;
+
+        const imports = matching
+          .map((css) => {
+            const rel = posix.relative(
+              posix.dirname(chunk.fileName),
+              css.fileName,
+            );
+            return `import "${rel.startsWith(".") ? rel : `./${rel}`}";`;
+          })
+          .join("\n");
+
+        chunk.code = imports + "\n" + chunk.code;
+      }
+    },
+  };
+}
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     visualizer(),
-    libInjectCss(),
+    injectCssIntoChunks(),
     dts({
       tsconfigPath: resolve(__dirname, "tsconfig.json"),
       exclude: ["src/**/*.test.tsx"],
+      bundleTypes: true,
     }),
   ],
   build: {
     copyPublicDir: false,
+    cssCodeSplit: true,
     lib: {
       entry: resolve(__dirname, "src/index.tsx"),
       formats: ["es"],
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ["react", "react/jsx-runtime", "antd"],
-      input: Object.fromEntries(
-        glob
-          .sync("src/**/*.{ts,tsx}", {
-            ignore: ["src/**/*.d.ts", "src/**/*.test.tsx"],
-          })
-          .map((file) => [
-            relative("src", file.slice(0, file.length - extname(file).length)),
-            fileURLToPath(new URL(file, import.meta.url)),
-          ]),
-      ),
       output: {
+        cleanDir: true,
         assetFileNames: "assets/[name][extname]",
         entryFileNames: "[name].js",
-        chunkFileNames: ({ name }) => {
-          if (name.endsWith(".js")) return `vendor/${name}`;
-          return `vendor/${name.startsWith("lang") ? "lang" : ""}/${name}.js`;
-        },
-        manualChunks: (id) => {
-          const packageName: string | undefined = id.match(
-            /node_modules\/(.+?)\//,
-          )?.[1];
-          if (packageName?.startsWith("katex")) return "katex";
-          if (packageName?.startsWith("highlight.js")) {
-            const langName = id.match(/languages\/(.+)\.js/)?.[1];
-            if (langName) return `lang-${langName[0]}`;
-          }
+        minify: true,
+        codeSplitting: {
+          groups: [
+            {
+              name: "rsh",
+              test: /react-syntax-highlighter/,
+              minSize: 100000,
+              maxSize: 500000,
+            },
+            {
+              name: "katex",
+              test: /katex/,
+              minSize: 100000,
+              maxSize: 600000,
+            },
+            {
+              name: "sanitize-html",
+              test: /sanitize-html/,
+              minSize: 100000,
+              maxSize: 500000,
+            },
+          ],
         },
       },
     },
