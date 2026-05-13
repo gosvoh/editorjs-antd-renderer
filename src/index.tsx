@@ -12,6 +12,24 @@ import { ErrorBoundary } from "react-error-boundary";
 import Embed from "./blocks/embed/embed";
 import Quote from "./blocks/quote/quote";
 
+export type {
+  HeaderData,
+  ParagraphData,
+  ListData,
+  ListItem,
+  ListItemMeta,
+  ChecklistData,
+  ImageData,
+  CodeData,
+  MathData,
+  AttachesData,
+  EmbedData,
+  QuoteData,
+} from "./types";
+export type { ImageConfig } from "./blocks/image/image";
+export type { CodeConfig } from "./blocks/code/code";
+export type { AttachesConfig } from "./blocks/attaches/attaches";
+
 const Code = lazy(() => import("./blocks/code/code"));
 const Math = lazy(() => import("./blocks/math/math"));
 
@@ -42,6 +60,7 @@ export default function Renderer({
     checklist?: Omit<React.ComponentProps<typeof Checklist>, "data">;
     header?: Omit<React.ComponentProps<typeof Header>, "data">;
     paragraph?: Omit<React.ComponentProps<typeof Paragraph>, "data">;
+    list?: Omit<React.ComponentProps<typeof List>, "data">;
   };
   customBlocks?: Record<string, CustomBlockRenderer>;
 }) {
@@ -76,7 +95,7 @@ export default function Renderer({
       case "paragraph":
         return <Paragraph data={block.data} {...blocksProps?.paragraph} />;
       case "list":
-        return <List data={block.data} />;
+        return <List data={block.data} {...blocksProps?.list} />;
       case "checklist":
         return <Checklist data={block.data} {...blocksProps?.checklist} />;
       case "image":
