@@ -1,3 +1,6 @@
+import sanitizeHtml from "sanitize-html";
+import parse from "html-react-parser";
+
 export default function Quote({
   data,
   style,
@@ -29,7 +32,7 @@ export default function Quote({
         }}
         {...paragraphProps}
       >
-        {data.text}
+        {parse(sanitizeHtml(data.text))}
       </p>
       {data.caption && (
         <>
@@ -42,7 +45,7 @@ export default function Quote({
             }}
             {...captionProps}
           >
-            {data.caption}
+            {parse(sanitizeHtml(data.caption))}
           </cite>
         </>
       )}

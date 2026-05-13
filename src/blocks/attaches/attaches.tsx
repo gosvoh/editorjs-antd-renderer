@@ -36,6 +36,7 @@ export default function Attaches({
           href={url}
           download={data.file.name}
           target="_blank"
+          rel="noopener noreferrer"
           type="primary"
           {...buttonProps}
         />
@@ -44,6 +45,7 @@ export default function Attaches({
         href={url}
         download={data.file.name}
         target="_blank"
+        rel="noopener noreferrer"
         {...linkProps}
       >
         {data.title}
@@ -54,6 +56,7 @@ export default function Attaches({
           href={url}
           download={data.file.name}
           target="_blank"
+          rel="noopener noreferrer"
           type="primary"
           {...buttonProps}
         />

@@ -20,13 +20,22 @@ export default function Embed({
     caption?: string;
   };
 } & React.ComponentProps<typeof Space>) {
-  if (data.service.includes("twitch")) {
-    data.embed = `${data.embed}&parent=${window.location.hostname}`;
+  const service = SERVICES[data.service];
+  if (!service) return null;
+
+  let embedUrl = data.embed;
+  if (data.service.includes("twitch") && typeof window !== "undefined") {
+    embedUrl = `${embedUrl}&parent=${window.location.hostname}`;
   }
-  const serviceHtml = SERVICES[data.service].html.replace(
-    "><",
-    ` src="${data.embed}"><`,
-  );
+
+  let safeUrl: string;
+  try {
+    safeUrl = new URL(embedUrl).href;
+  } catch {
+    return null;
+  }
+
+  const serviceHtml = service.html.replace("><", ` src="${safeUrl}"><`);
 
   return (
     <Space direction="vertical" {...props}>
