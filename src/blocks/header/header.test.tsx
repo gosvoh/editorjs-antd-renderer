@@ -30,6 +30,23 @@ test("Header", () => {
   expect(component).toBeInTheDocument();
 });
 
+test("Header renders correct heading level", () => {
+  render(<Renderer data={correctData} />);
+  const heading = screen.getByRole("heading", { level: 2 });
+  expect(heading).toBeInTheDocument();
+});
+
+test("Header renders HTML content", () => {
+  render(
+    <Renderer
+      data={{
+        blocks: [{ type: "header", data: { text: "Hello <b>World</b>", level: 1 } }],
+      }}
+    />,
+  );
+  expect(screen.getByText("World")).toBeInTheDocument();
+});
+
 test("Error header", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {

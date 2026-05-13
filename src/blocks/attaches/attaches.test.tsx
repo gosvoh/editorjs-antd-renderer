@@ -39,6 +39,38 @@ test("Attaches", () => {
   );
 });
 
+test("Attaches applies urlPrefix from config", () => {
+  render(
+    <Renderer
+      data={{
+        blocks: [
+          {
+            type: "attaches",
+            data: {
+              file: { url: "doc.pdf", name: "doc.pdf" },
+              title: "Document",
+            },
+          },
+        ],
+      }}
+      config={{ attaches: { urlPrefix: "https://files.example.com/" } }}
+    />,
+  );
+  expect(screen.getByText("Document")).toHaveAttribute(
+    "href",
+    "https://files.example.com/doc.pdf",
+  );
+});
+
+test("Attaches sets download attribute", () => {
+  render(<Renderer data={correctData} />);
+  const link = screen.getByText(correctData.blocks[0].data.title);
+  expect(link).toHaveAttribute(
+    "download",
+    correctData.blocks[0].data.file.name,
+  );
+});
+
 test("Error attaches", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {

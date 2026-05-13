@@ -29,6 +29,34 @@ test("Paragraph", () => {
   expect(component).toBeInTheDocument();
 });
 
+test("Paragraph renders HTML content", () => {
+  render(
+    <Renderer
+      data={{
+        blocks: [{ type: "paragraph", data: { text: "Click <a href='/'>here</a>" } }],
+      }}
+    />,
+  );
+  expect(screen.getByRole("link", { name: "here" })).toBeInTheDocument();
+});
+
+test("Paragraph strips script tags (XSS)", () => {
+  render(
+    <Renderer
+      data={{
+        blocks: [
+          {
+            type: "paragraph",
+            data: { text: 'Safe<script>alert("xss")</script>' },
+          },
+        ],
+      }}
+    />,
+  );
+  expect(screen.getByText("Safe")).toBeInTheDocument();
+  expect(document.querySelector("script")).toBeNull();
+});
+
 test("Error paragraph", () => {
   render(<Renderer data={errorData} />);
   const errorComponent = screen.getByText("Error rendering block", {
