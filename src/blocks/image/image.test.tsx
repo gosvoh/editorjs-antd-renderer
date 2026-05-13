@@ -43,7 +43,13 @@ test("Image applies urlPrefix from config", () => {
         blocks: [
           {
             type: "image",
-            data: { file: { url: "photo.jpg" }, caption: "photo", withBorder: false, withBackground: false, stretched: false },
+            data: {
+              file: { url: "photo.jpg" },
+              caption: "photo",
+              withBorder: false,
+              withBackground: false,
+              stretched: false,
+            },
           },
         ],
       }}
@@ -63,7 +69,13 @@ test("Image uses url field when file is absent (simpleImage)", () => {
         blocks: [
           {
             type: "simpleImage",
-            data: { url: "https://example.com/img.jpg", caption: "simple", withBorder: false, withBackground: false, stretched: false },
+            data: {
+              url: "https://example.com/img.jpg",
+              caption: "simple",
+              withBorder: false,
+              withBackground: false,
+              stretched: false,
+            },
           },
         ],
       }}

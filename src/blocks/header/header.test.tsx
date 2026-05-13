@@ -40,7 +40,9 @@ test("Header renders HTML content", () => {
   render(
     <Renderer
       data={{
-        blocks: [{ type: "header", data: { text: "Hello <b>World</b>", level: 1 } }],
+        blocks: [
+          { type: "header", data: { text: "Hello <b>World</b>", level: 1 } },
+        ],
       }}
     />,
   );

@@ -6,7 +6,10 @@ export default function Warning({
   ...props
 }: {
   data: { title: string; message: string };
-} & Omit<React.ComponentProps<typeof Alert>, "message" | "description" | "type" | "showIcon">) {
+} & Omit<
+  React.ComponentProps<typeof Alert>,
+  "message" | "description" | "type" | "showIcon"
+>) {
   return (
     <Alert
       type="warning"

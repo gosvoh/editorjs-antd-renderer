@@ -17,9 +17,7 @@ const correctData = {
 
 test("Quote renders text and caption", () => {
   render(<Renderer data={correctData} />);
-  expect(
-    screen.getByText(correctData.blocks[0].data.text),
-  ).toBeInTheDocument();
+  expect(screen.getByText(correctData.blocks[0].data.text)).toBeInTheDocument();
   expect(
     screen.getByText(correctData.blocks[0].data.caption),
   ).toBeInTheDocument();
@@ -30,7 +28,10 @@ test("Quote renders without caption", () => {
     <Renderer
       data={{
         blocks: [
-          { type: "quote", data: { text: "No caption here", alignment: "left" } },
+          {
+            type: "quote",
+            data: { text: "No caption here", alignment: "left" },
+          },
         ],
       }}
     />,

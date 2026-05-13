@@ -33,7 +33,9 @@ test("Paragraph renders HTML content", () => {
   render(
     <Renderer
       data={{
-        blocks: [{ type: "paragraph", data: { text: "Click <a href='/'>here</a>" } }],
+        blocks: [
+          { type: "paragraph", data: { text: "Click <a href='/'>here</a>" } },
+        ],
       }}
     />,
   );

@@ -27,7 +27,10 @@ test("Warning strips script tags (XSS)", () => {
         blocks: [
           {
             type: "warning",
-            data: { title: "Alert", message: 'Safe<script>alert("xss")</script>' },
+            data: {
+              title: "Alert",
+              message: 'Safe<script>alert("xss")</script>',
+            },
           },
         ],
       }}
