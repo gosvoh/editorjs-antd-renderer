@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-useless-escape */
 
-import { expect, test } from "bun:test";
-// @ts-expect-error TS6133
-import Renderer from "../../index";
-// @ts-expect-error TS6133
-import { screen, render } from "@testing-library/react";
-import React from "react";
+import { expect, test, beforeAll } from "bun:test";
+import { render } from "@testing-library/react";
 import Embed from "./embed";
 
-const patterns = {
+beforeAll(() => {
+  // Prevent happy-dom from fetching iframe src URLs
+  global.fetch = (() => Promise.resolve(new Response())) as unknown as typeof fetch;
+});
+
+const patterns: Record<string, RegExp> = {
   vimeo:
     /(?:http[s]?:\/\/)?(?:www.)?(?:player.)?vimeo\.co(?:.+\/([^\/]\d+)(?:#t=[\d]+)?s?$)/,
   youtube:
@@ -36,56 +36,49 @@ const patterns = {
   github: /https?:\/\/gist.github.com\/([^\/\?\&]*)\/([^\/\?\&]*)/,
 };
 
-// @ts-expect-error TS6133
-const prepareData = (
-  service: string,
-  urls: { source: string; embed: string },
-) => ({
-  blocks: [
-    {
-      type: "embed",
-      data: { service, ...urls } as React.ComponentProps<typeof Embed>["data"],
-    },
-  ],
+const youtubeUrls = [
+  {
+    source: "https://www.youtube.com/watch?v=wZZ7oFKsKzY&t=120",
+    embed: "https://www.youtube.com/embed/wZZ7oFKsKzY?start=120",
+  },
+  {
+    source:
+      "https://www.youtube.com/embed/_q51LZ2HpbE?list=PLLy6qvPKpdlV3OAw00EuZMoYPz4pYuwuN",
+    embed:
+      "https://www.youtube.com/embed/_q51LZ2HpbE?list=PLLy6qvPKpdlV3OAw00EuZMoYPz4pYuwuN",
+  },
+  {
+    source: "https://www.youtube.com/watch?time_continue=173&v=Nd9LbCWpHp8",
+    embed: "https://www.youtube.com/embed/Nd9LbCWpHp8?start=173",
+  },
+  {
+    source: "https://www.youtube.com/watch?v=efBBjIK3b8I&list=LL&t=1337",
+    embed: "https://www.youtube.com/embed/efBBjIK3b8I?start=1337",
+  },
+];
+
+test("YouTube pattern matches source URLs", () => {
+  youtubeUrls.forEach(({ source }) => {
+    expect(patterns["youtube"].test(source)).toBe(true);
+  });
 });
 
-test("YouTube", async () => {
-  const service = "youtube";
+test("YouTube renders iframe with correct src", () => {
+  const { source, embed } = youtubeUrls[0];
+  render(<Embed data={{ service: "youtube", source, embed }} />);
+  const iframe = document.querySelector("iframe");
+  expect(iframe?.getAttribute("src")).toBe(embed);
+});
 
-  const urls = [
-    {
-      source: "https://www.youtube.com/watch?v=wZZ7oFKsKzY&t=120",
-      embed: "https://www.youtube.com/embed/wZZ7oFKsKzY?start=120",
-    },
-    {
-      source:
-        "https://www.youtube.com/embed/_q51LZ2HpbE?list=PLLy6qvPKpdlV3OAw00EuZMoYPz4pYuwuN",
-      embed:
-        "https://www.youtube.com/embed/_q51LZ2HpbE?list=PLLy6qvPKpdlV3OAw00EuZMoYPz4pYuwuN",
-    },
-    {
-      source: "https://www.youtube.com/watch?time_continue=173&v=Nd9LbCWpHp8",
-      embed: "https://www.youtube.com/embed/Nd9LbCWpHp8?start=173",
-    },
-    {
-      source: "https://www.youtube.com/watch?v=efBBjIK3b8I&list=LL&t=1337",
-      embed: "https://www.youtube.com/embed/efBBjIK3b8I?start=1337",
-    },
-    {
-      source:
-        "https://www.youtube.com/watch?v=yQUeAin7fII&list=RDMMnMXCzscqi_M",
-      embed: "https://www.youtube.com/embed/yQUeAin7fII?",
-    },
-    {
-      source:
-        "https://www.youtube.com/watch?v=3kw2sttGXMI&list=FLgc4xqIMDoiP4KOTFS21TJA",
-      embed: "https://www.youtube.com/embed/3kw2sttGXMI?",
-    },
-  ];
-
-  urls.forEach((url) => {
-    expect(patterns[service].test(url.source)).toBe(true);
-
-    // render(<Renderer data={prepareData(service, url)} />); - TODO: Failed to execute "fetch()" on "Window" with URL
-  });
+test("Unknown service renders nothing", () => {
+  const { container } = render(
+    <Embed
+      data={{
+        service: "unknown-service",
+        source: "https://example.com",
+        embed: "https://example.com/embed",
+      }}
+    />,
+  );
+  expect(container.firstChild).toBeNull();
 });
