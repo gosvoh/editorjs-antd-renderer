@@ -6,7 +6,8 @@ import Embed from "./embed";
 
 beforeAll(() => {
   // Prevent happy-dom from fetching iframe src URLs
-  global.fetch = (() => Promise.resolve(new Response())) as unknown as typeof fetch;
+  global.fetch = (() =>
+    Promise.resolve(new Response())) as unknown as typeof fetch;
 });
 
 const patterns: Record<string, RegExp> = {
