@@ -23,5 +23,5 @@
 
     "types": ["bun"]
   },
-  "include": ["src"]
+  "include": ["src", "matchers.d.ts"]
 }

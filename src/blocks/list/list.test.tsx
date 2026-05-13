@@ -86,9 +86,7 @@ test("List", () => {
   expect(redElements).toHaveLength(3);
   const checklistItems = screen.getAllByRole("checkbox");
   expect(checklistItems).toHaveLength(2);
-  // @ts-expect-error
   expect(checklistItems[0]).not.toBeChecked();
-  // @ts-expect-error
   expect(checklistItems[1]).toBeChecked();
 });
 
@@ -98,8 +96,6 @@ test("Error list", () => {
     exact: false,
   });
   const correctComponent = screen.queryByText("Apples");
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

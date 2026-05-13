@@ -23,10 +23,9 @@ const errorData = {
   ],
 };
 
-test("Code", () => {
+test("Code", async () => {
   render(<Renderer data={correctData} />);
-  const component = screen.getByRole("code");
-  // @ts-expect-error
+  const component = await screen.findByRole("code");
   expect(component).toBeInTheDocument();
 });
 
@@ -36,8 +35,6 @@ test("Error code", () => {
     exact: false,
   });
   const correctComponent = screen.queryByRole("code");
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

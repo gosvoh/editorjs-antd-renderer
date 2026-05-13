@@ -23,10 +23,9 @@ const errorData = {
   ],
 };
 
-test("Math", () => {
+test("Math", async () => {
   render(<Renderer data={correctData} />);
-  const component = screen.getByRole("math");
-  // @ts-expect-error
+  const component = await screen.findByRole("math");
   expect(component).toBeInTheDocument();
 });
 
@@ -36,8 +35,6 @@ test("Error math", () => {
     exact: false,
   });
   const correctComponent = screen.queryByRole("math");
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

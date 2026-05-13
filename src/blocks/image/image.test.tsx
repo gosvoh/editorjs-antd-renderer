@@ -32,9 +32,7 @@ const errorData = {
 test("Image", () => {
   render(<Renderer data={correctData} />);
   const component = screen.getByAltText(correctData.blocks[0].data.caption);
-  // @ts-expect-error
   expect(component).toBeInTheDocument();
-  // @ts-expect-error
   expect(component).toHaveAttribute("src", correctData.blocks[0].data.file.url);
 });
 
@@ -46,8 +44,6 @@ test("Error image", () => {
   const correctComponent = screen.queryByAltText(
     correctData.blocks[0].data.caption,
   );
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

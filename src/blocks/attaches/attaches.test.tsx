@@ -32,9 +32,7 @@ const errorData = {
 test("Attaches", () => {
   render(<Renderer data={correctData} />);
   const component = screen.getByText(correctData.blocks[0].data.title);
-  // @ts-expect-error
   expect(component).toBeInTheDocument();
-  // @ts-expect-error
   expect(component).toHaveAttribute(
     "href",
     correctData.blocks[0].data.file.url,
@@ -47,8 +45,6 @@ test("Error attaches", () => {
     exact: false,
   });
   const correctComponent = screen.queryByText(correctData.blocks[0].data.title);
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

@@ -26,7 +26,6 @@ const errorData = {
 test("Paragraph", () => {
   render(<Renderer data={correctData} />);
   const component = screen.getByText(correctData.blocks[0].data.text);
-  // @ts-expect-error
   expect(component).toBeInTheDocument();
 });
 
@@ -36,8 +35,6 @@ test("Error paragraph", () => {
     exact: false,
   });
   const correctComponent = screen.queryByText(correctData.blocks[0].data.text);
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

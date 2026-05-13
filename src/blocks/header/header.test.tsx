@@ -27,7 +27,6 @@ const errorData = {
 test("Header", () => {
   render(<Renderer data={correctData} />);
   const component = screen.getByText(correctData.blocks[0].data.text);
-  // @ts-expect-error
   expect(component).toBeInTheDocument();
 });
 
@@ -37,8 +36,6 @@ test("Error header", () => {
     exact: false,
   });
   const correctComponent = screen.queryByText(correctData.blocks[0].data.text);
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });

@@ -40,11 +40,8 @@ test("Checklist", () => {
   render(<Renderer data={correctData} />);
   const checkboxes = screen.getAllByRole("checkbox");
   expect(checkboxes).toHaveLength(3);
-  // @ts-expect-error
   expect(checkboxes[0]).toBeChecked();
-  // @ts-expect-error
   expect(checkboxes[1]).not.toBeChecked();
-  // @ts-expect-error
   expect(checkboxes[2]).toBeChecked();
 });
 
@@ -54,8 +51,6 @@ test("Error checklist", () => {
     exact: false,
   });
   const correctComponent = screen.queryByRole("checkbox");
-  // @ts-expect-error
   expect(errorComponent).toBeInTheDocument();
-  // @ts-expect-error
   expect(correctComponent).not.toBeInTheDocument();
 });
