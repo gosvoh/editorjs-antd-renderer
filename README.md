@@ -17,6 +17,8 @@ Render [Editor.js](https://editorjs.io) output data to React components using [A
 | [Embed](https://github.com/editor-js/embed) | `embed` |
 | [Attaches](https://github.com/editor-js/attaches) | `attaches` |
 | [Math](https://github.com/n0str/editorjs-math) | `math` |
+| [Delimiter](https://github.com/editor-js/delimiter) | `delimiter` |
+| [Warning](https://github.com/editor-js/warning) | `warning` |
 | [Marker](https://github.com/editor-js/marker) | inline |
 | [InlineCode](https://github.com/editor-js/inline-code) | inline |
 

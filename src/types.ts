@@ -65,3 +65,10 @@ export type QuoteData = {
   caption?: string;
   alignment?: "left" | "center";
 };
+
+export type DelimiterData = Record<string, never>;
+
+export type WarningData = {
+  title: string;
+  message: string;
+};

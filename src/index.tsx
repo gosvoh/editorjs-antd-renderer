@@ -11,6 +11,8 @@ import Attaches, { type AttachesConfig } from "./blocks/attaches/attaches";
 import { ErrorBoundary } from "react-error-boundary";
 import Embed from "./blocks/embed/embed";
 import Quote from "./blocks/quote/quote";
+import Delimiter from "./blocks/delimiter/delimiter";
+import Warning from "./blocks/warning/warning";
 
 export type {
   HeaderData,
@@ -25,6 +27,8 @@ export type {
   AttachesData,
   EmbedData,
   QuoteData,
+  DelimiterData,
+  WarningData,
 } from "./types";
 export type { ImageConfig } from "./blocks/image/image";
 export type { CodeConfig } from "./blocks/code/code";
@@ -61,6 +65,8 @@ export default function Renderer({
     header?: Omit<React.ComponentProps<typeof Header>, "data">;
     paragraph?: Omit<React.ComponentProps<typeof Paragraph>, "data">;
     list?: Omit<React.ComponentProps<typeof List>, "data">;
+    delimiter?: React.ComponentProps<typeof Delimiter>;
+    warning?: Omit<React.ComponentProps<typeof Warning>, "data">;
   };
   customBlocks?: Record<string, CustomBlockRenderer>;
 }) {
@@ -157,6 +163,10 @@ export default function Renderer({
         return <Embed data={block.data} {...blocksProps?.embed} />;
       case "quote":
         return <Quote data={block.data} {...blocksProps?.quote} />;
+      case "delimiter":
+        return <Delimiter {...blocksProps?.delimiter} />;
+      case "warning":
+        return <Warning data={block.data} {...blocksProps?.warning} />;
       default:
         if (customBlocks?.[block.type]) {
           return customBlocks[block.type](block);
