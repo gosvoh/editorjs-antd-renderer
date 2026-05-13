@@ -29,9 +29,10 @@ function ListRenderer({
 
 export default function List({
   data,
+  ...props
 }: {
   data: { style: string; items: Item[] | string[]; meta?: Item["meta"] };
-}) {
+} & React.ComponentProps<typeof Typography.Paragraph>) {
   const getRecursiveList = (items: Item[] | string[], nesting = 0) =>
     items.map((item, index) => {
       if (typeof item === "string")
@@ -62,7 +63,7 @@ export default function List({
     });
 
   return (
-    <Typography.Paragraph>
+    <Typography.Paragraph {...props}>
       <ListRenderer style={data.style} meta={data.meta}>
         {getRecursiveList(data.items)}
       </ListRenderer>
