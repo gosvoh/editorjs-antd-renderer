@@ -74,7 +74,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rolldownOptions: {
-      external: ["react", "react/jsx-runtime", "antd"],
+      external: ["react", "react/jsx-runtime", "antd", "html-react-parser"],
       output: {
         cleanDir: true,
         assetFileNames: "assets/[name][extname]",
