@@ -2,14 +2,7 @@ import sanitizeHtml from "sanitize-html";
 import parse from "html-react-parser";
 import { Checkbox, Typography } from "antd";
 import React from "react";
-
-type ItemMeta = { checked?: boolean; start?: number; counterType?: string };
-
-type Item = {
-  content: string;
-  meta: ItemMeta;
-  items: Item[];
-};
+import type { ListItem, ListItemMeta } from "../../types";
 
 function ListRenderer({
   style,
@@ -17,7 +10,7 @@ function ListRenderer({
   meta,
 }: React.PropsWithChildren<{
   style: string;
-  meta?: ItemMeta;
+  meta?: ListItemMeta;
 }>) {
   if (["unordered", "checklist"].includes(style)) return <ul>{children}</ul>;
   return (
@@ -31,9 +24,9 @@ export default function List({
   data,
   ...props
 }: {
-  data: { style: string; items: Item[] | string[]; meta?: Item["meta"] };
+  data: { style: string; items: ListItem[] | string[]; meta?: ListItemMeta };
 } & React.ComponentProps<typeof Typography.Paragraph>) {
-  const getRecursiveList = (items: Item[] | string[], nesting = 0) =>
+  const getRecursiveList = (items: ListItem[] | string[], nesting = 0) =>
     items.map((item, index) => {
       if (typeof item === "string")
         return <li key={`list-item-${index}`}>{parse(sanitizeHtml(item))}</li>;
