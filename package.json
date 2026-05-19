@@ -41,8 +41,8 @@
     "highlight.js": "^11.11.1",
     "html-react-parser": "^5.2.17",
     "hylang": "^0.1.0",
+    "katex": "^0.16.47",
     "react-error-boundary": "^6.1.1",
-    "react-katex": "^3.1.0",
     "react-syntax-highlighter": "^16.1.1",
     "sanitize-html": "^2.17.4"
   },
